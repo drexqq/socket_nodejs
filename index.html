@@ -10,6 +10,7 @@
     #messages { list-style-type: none; margin: 0; padding: 0; }
     #messages li { padding: 5px 10px; }
     #messages li:nth-child(odd) { background: #eee; }
+
     </style>
   </head>
   <body>
@@ -42,6 +43,26 @@
       <div class="col-lg-8"></div>
     </div>
     
+    <script src="/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+      $(() => {
+        /** Socket Starts **/
+        const socket = io();
+        console.log(socket)
+        // 클라이언트에서 reuqest_message 프로토콜로 id='m' 의 input 값을 보낸다.
+        $('#msg-send').click((e) => {
+            e.preventDefault();
+            socket.emit('request_message', $('#m').val());
+            $('#m').val('');
+            return false; 
+        });
+
+        socket.on('response_message', (res) => {
+            $('#messages').prepend($('<li>').text(res));
+        });
+
+      });
+    </script>
   </body>
 </html>
